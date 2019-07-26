@@ -1,4 +1,4 @@
-pragma solidity ^0.5.4;
+pragma solidity ^0.5.10;
 
 contract Admin {
     address public cur_admin;
