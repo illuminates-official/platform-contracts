@@ -1,3 +1,5 @@
+pragma solidity ^0.5.10;
+
 import "./Admin.sol";
 
 contract PrivateProperty is Admin {
@@ -13,7 +15,7 @@ contract PrivateProperty is Admin {
     event Constructor(address _admin, address _registry);
 
     constructor(address _admin, bytes32 _owner_hash, address _registry) public {
-        cur_admin = _admin;
+        admin = _admin;
         owner_hash = _owner_hash;
         registry = _registry;
 

@@ -1,5 +1,4 @@
-
-
+pragma solidity ^0.5.10;
 
 import "./Admin.sol";
 import "./IERC20.sol";
@@ -19,17 +18,17 @@ contract Conference is Admin {
     event Constructor(address _admin, address _registry);
 
     constructor(address payable eth, bytes32 fiat, uint _cost, uint _fcost,
-        address admin, address _reg)
+        address _admin, address _reg)
     public {
         ethRecipient = eth;
         fiatRecipient = fiat;
         cost = _cost;
         fcost = _fcost;
 
-        cur_admin = admin;
+        admin = _admin;
         registry = _reg;
 
-        emit Constructor(cur_admin, registry);
+        emit Constructor(admin, registry);
     }
 
     function payTicket() public payable{

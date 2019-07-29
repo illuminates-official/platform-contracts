@@ -1,16 +1,40 @@
-pragma solidity ^0.5.4;
+pragma solidity ^0.5.10;
+
+import "./IAR.sol";
 
 contract Admin {
-    address public cur_admin;
-    event ChangeAdmin(address oldAdmin, address newAdmin);
-    
+    address public admin;
+    address public registry;
+
+    event AdminChanging(address indexed previousAdmin, address indexed nextAdmin);
+    event RegistryChanging(address indexed previousRegistry, address indexed nextRegistry);
+
     modifier onlyAdmin() {
-        require(msg.sender == cur_admin);
+        require(msg.sender == admin);
         _;
     }
-    
-    function changeAdmin(address newAdmin) public onlyAdmin {
-        cur_admin = newAdmin;
+
+    constructor(address _admin, address _registry) internal {
+        admin = _admin;
+        registry = _registry;
+        emit AdminChanging(address(0), admin);
     }
-    
+
+    function changeAdmin(address _newAdmin) public {
+        require(msg.sender == admin || msg.sender == registry);
+        require(_newAdmin != address(0));
+
+        emit AdminChanging(admin, _newAdmin);
+        admin = _newAdmin;
+
+        IAR(registry).changeAdmin(_newAdmin);
+    }
+
+    function changeRegistry(address _newRegistry) public {
+        require(msg.sender == admin || msg.sender == registry);
+        require(_newRegistry != address(0));
+
+        emit RegistryChanging(registry, _newRegistry);
+        registry = _newRegistry;
+    }
 }

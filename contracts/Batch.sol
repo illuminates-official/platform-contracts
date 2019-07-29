@@ -1,3 +1,5 @@
+pragma solidity ^0.5.10;
+
 import "./SafeMath.sol";
 import "./Admin.sol";
 
@@ -23,19 +25,19 @@ contract Batch is Admin {
 
     constructor(bytes32 _manufacturer, bytes32 _batch, string memory _batchInformation,
         bytes32[] memory _distributors, uint[] memory _productAmount,
-        address admin, address _registry)
+        address _admin, address _registry)
     public {
         manufacturer = _manufacturer;
         batch = _batch;
         batchInformation = _batchInformation;
         distributors = _distributors;
 
-        cur_admin = admin;
+        admin = _admin;
         registry = _registry;
 
         _amountAssigment(distributors, _productAmount);
 
-        emit Constructor(cur_admin, registry);
+        emit Constructor(admin, registry);
     }
 
     function _amountAssigment(bytes32[] memory _distributors, uint[] memory _products) private {

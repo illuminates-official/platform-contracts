@@ -1,3 +1,5 @@
+pragma solidity ^0.5.10;
+
 import "./Admin.sol";
 
 contract Task is Admin {
@@ -15,17 +17,17 @@ contract Task is Admin {
     event Constructor(address _admin, address _registry);
 
     constructor(bytes32 exec, bytes32 cust, bytes32 _tor, bytes32 cStat,
-        address admin, address _reg)
+        address _admin, address _reg)
     public {
         executor = exec;
         customer = cust;
         tor = _tor;
         correspondenceStatus = cStat;
 
-        cur_admin = admin;
+        admin = _admin;
         registry = _reg;
 
-        emit Constructor(cur_admin, registry);
+        emit Constructor(admin, registry);
     }
 
     function isEqual(string memory _str, bytes32 _hash) public pure returns(bool) {
@@ -38,17 +40,17 @@ contract Task is Admin {
 
     function changeExecutor(bytes32 newExecutor) public onlyAdmin {
         executor = newExecutor;
-        emit ExecutorChanging(executor, cur_admin, now);
+        emit ExecutorChanging(executor, admin, now);
     }
 
     function changeTor(bytes32 newTor) public onlyAdmin {
         tor = newTor;
-        emit TorChanging(tor, cur_admin, now);
+        emit TorChanging(tor, admin, now);
     }
 
     function changeCStatus(bytes32 newCStatus) public onlyAdmin {
         correspondenceStatus = newCStatus;
-        emit cStatusChanging(correspondenceStatus, cur_admin, now);
+        emit cStatusChanging(correspondenceStatus, admin, now);
     }
 
     function changeRegistry(address _newRegistry) public onlyAdmin {
