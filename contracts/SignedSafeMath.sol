@@ -1,6 +1,7 @@
+pragma solidity ^0.5.10;
+
 library SignedSafeMath {
     int256 constant private INT256_MIN = -2**255;
-
 
     function mul(int256 a, int256 b) internal pure returns (int256) {
         if (a == 0) {

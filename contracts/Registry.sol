@@ -1,59 +1,70 @@
-import "./Admin.sol";
+pragma solidity ^0.5.10;
 
-contract Registry is Admin {
+import "./RegistryAdmin.sol";
+import "./IAR.sol";
 
-    enum types {
-        task,
-        news,
-        private_property,
-        invoice,
-        patent,
-        dedicated_registry
-    }
+contract Registry is RegistryAdmin {
 
-    struct info{
-        types cur_type;
-        bool is_active;
+    struct info {
+        string type_;
+        bool active;
         address admin;
     }
 
-    mapping(address => info) registry;
-    string[] types_list = ["task", "news", "private property", "invoice", "patent", "dedicated_registry"];
+    mapping(address => info) private registry;
+    string[] public types = ["ApprovableTask", "Article", "Batch", "Conference", "Invoice", "Patent", "PrivateProperty", "Task"];
 
-    event addContract(address _contract, address _admin);
-    event Constructor(address _admin);
+    event ContractStatusChanged(address indexed _contract, string indexed _type, address indexed _admin);
 
-    constructor(address _admin) public {
-        cur_admin = _admin;
-        emit Constructor(cur_admin);
-    }
+    constructor(address _admin) RegistryAdmin(_admin) public {}
 
-    function addContractToRegistry(uint _type, address _contract) public onlyAdmin returns(bool success) {
-        require(!registry[_contract].is_active);
-        require(_type < types_list.length);
-        registry[_contract].cur_type = types(_type);
-        registry[_contract].is_active = true;
-        registry[_contract].admin = msg.sender;
-        emit addContract(_contract, msg.sender);
+    function addContractToRegistry(address _contract, uint _type, address _admin) public onlyAdmin {
+        require(!registry[_contract].active);
+        require(_type < types.length);
+        registry[_contract].type_ = types[_type];
+        registry[_contract].active = true;
+        registry[_contract].admin = _admin;
 
-        return true;
+        emit ContractStatusChanged(_contract, types[_type], _admin);
     }
 
     function getContractInfo(address _contract) public view returns(string memory, bool, address) {
-        return(getTypeContract(_contract), registry[_contract].is_active, registry[_contract].admin);
+        return(registry[_contract].type_, registry[_contract].active, registry[_contract].admin);
     }
 
-    function isRegistered(address _contract) public view returns(bool) {
-        return registry[_contract].is_active;
+    function addType(string memory _newType) public onlyAdmin {
+        types.push(_newType);
     }
 
-    function getType(uint _num) public view returns(string memory) {
-        require(_num < types_list.length);
-        return types_list[_num];
+    function removeType(uint index) public onlyAdmin {
+        require(index < types.length);
+        for (uint i = index; i < types.length - 1; i++)
+            types[i] = types[i + 1];
+        // types[index] = types[types.length - 1];
+        types.pop();
     }
 
-    function getTypeContract(address _contract) public view returns(string memory) {
-        require(isRegistered(_contract));
-        return getType(uint(registry[_contract].cur_type));
+    // by registry admin?
+    function deactivateContract(address _contract) public {
+        require(msg.sender == registry[_contract].admin);
+
+        registry[_contract].active = false;
+    }
+
+    function changeAdmin(address _contract, address _newAdmin) public {
+        require(msg.sender == registry[_contract].admin);
+
+        IAR(_contract).changeAdmin(_newAdmin);
+    }
+
+    function changeAdmin(address _newAdmin) public {
+        require(registry[msg.sender].active);
+
+        changeContractAdmin(msg.sender, _newAdmin);
+    }
+
+    function changeContractAdmin(address _contract, address _newAdmin) internal {
+        registry[_contract].admin = _newAdmin;
+        emit ContractStatusChanged(_contract, registry[_contract].type_, _newAdmin);
     }
 }

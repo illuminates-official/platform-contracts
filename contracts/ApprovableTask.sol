@@ -1,3 +1,5 @@
+pragma solidity ^0.5.10;
+
 import "./Admin.sol";
 import "./IERC20.sol";
 
@@ -18,16 +20,16 @@ contract ApprovableTask is Admin {
     event Constructor(address _admin, address _registry);
 
     constructor(bytes32 exec, bytes32 cust, uint _pay,
-        address admin, address _reg)
+        address _admin, address _reg)
     public {
         executor = exec;
         customer = cust;
         pay = _pay;
 
-        cur_admin = admin;
+        admin = _admin;
         registry = _reg;
 
-        emit Constructor(cur_admin, registry);
+        emit Constructor(admin, registry);
     }
 
     function isEqual(string memory _str, bytes32 _hash) public pure returns(bool) {
@@ -40,7 +42,7 @@ contract ApprovableTask is Admin {
 
     function changeExecutor(bytes32 newExecutor) public onlyAdmin {
         executor = newExecutor;
-        emit ExecutorChanging(executor, cur_admin, now);
+        emit ExecutorChanging(executor, admin, now);
     }
 
     function approve(address _approvement) public onlyAdmin {

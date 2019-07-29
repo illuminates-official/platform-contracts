@@ -1,3 +1,5 @@
+pragma solidity ^0.5.10;
+
 import "./Admin.sol";
 
 
@@ -18,7 +20,7 @@ contract Invoice is Admin {
     event SetDelivery_status(bool);
     event SetPayment_status(bool);
     event SetRealDelivery_time(uint);
-    event Costructor(address _registry, address cur_admin);
+    event Costructor(address _registry, address admin);
 
     constructor(bytes32 _seller_hash, bytes32 _customer_hash,
                 uint _delivery_time, address _registry, address _admin) public {
@@ -27,9 +29,9 @@ contract Invoice is Admin {
         customer_hash = _customer_hash;
         delivery_time = _delivery_time;
         registry = _registry;
-        cur_admin = _admin;
+        admin = _admin;
 
-        emit Costructor(registry, cur_admin);
+        emit Costructor(registry, admin);
     }
 
     function setDoc_hash(bytes32 _doc_hash) public onlyAdmin {

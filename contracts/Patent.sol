@@ -1,3 +1,5 @@
+pragma solidity ^0.5.10;
+
 import "./Admin.sol";
 
 
@@ -10,14 +12,14 @@ contract Patent is Admin {
     event RegistryChanging(address changer, address newRegistry, uint time);
     event Constructor(address _admin, address _registry);
 
-    constructor(bytes32 _owner, bytes32 _doc, address admin, address _registry) public {
+    constructor(bytes32 _owner, bytes32 _doc, address _admin, address _registry) public {
         owner = _owner;
         doc = _doc;
 
-        cur_admin = admin;
+        admin = _admin;
         registry = _registry;
 
-        emit Constructor(cur_admin, registry);
+        emit Constructor(admin, registry);
     }
 
 
