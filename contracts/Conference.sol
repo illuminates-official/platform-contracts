@@ -5,7 +5,6 @@ import "./IERC20.sol";
 
 contract Conference is Admin {
 
-    address public registry;
     address payable public ethRecipient;
     bytes32 public fiatRecipient;
     uint public cost;
@@ -14,21 +13,13 @@ contract Conference is Admin {
     mapping(address => bool) public tickets;
     mapping(bytes32 => bool) public ftickets;
 
-    event RegistryChanging(address changer, address newRegistry, uint time);
-    event Constructor(address _admin, address _registry);
-
     constructor(address payable eth, bytes32 fiat, uint _cost, uint _fcost,
-        address _admin, address _reg)
+        address _admin, address _reg) Admin(_admin, _reg)
     public {
         ethRecipient = eth;
         fiatRecipient = fiat;
         cost = _cost;
         fcost = _fcost;
-
-        admin = _admin;
-        registry = _reg;
-
-        emit Constructor(admin, registry);
     }
 
     function payTicket() public payable{
@@ -45,18 +36,7 @@ contract Conference is Admin {
     }
 
     function isEqual(string memory _str, bytes32 _hash) public pure returns(bool) {
-        bytes32 keccakHash = keccak256(abi.encode(_str));
-        if (keccakHash == _hash)
-            return true;
-        else
-            return false;
+        bytes32 keccakHash = keccak256(abi.encodePacked(_str));
+        return keccakHash == _hash;
     }
-
-
-    function changeRegistry(address _newRegistry) public onlyAdmin {
-        registry = _newRegistry;
-        emit RegistryChanging(msg.sender, registry, now);
-    }
-    
-
 }

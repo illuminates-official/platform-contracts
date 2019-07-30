@@ -16,7 +16,7 @@ contract Article is Admin {
         text = _text;
     }
 
-    function AddReference(address _ref) public onlyAdmin {
+    function addReference(address _ref) public onlyAdmin {
         require(_reference != _ref);
 
         _reference = _ref;

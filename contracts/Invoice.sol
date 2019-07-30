@@ -13,25 +13,18 @@ contract Invoice is Admin {
     bool public delivery_status;
     bool public payment_status;
     bytes32 public doc_hash;
-    address public registry;
 
-    event ChangeRegistry(address registry);
     event SetDoc_hash(bytes32);
     event SetDelivery_status(bool);
     event SetPayment_status(bool);
     event SetRealDelivery_time(uint);
-    event Costructor(address _registry, address admin);
 
     constructor(bytes32 _seller_hash, bytes32 _customer_hash,
-                uint _delivery_time, address _registry, address _admin) public {
-
+                uint _delivery_time, address _admin, address _registry) Admin(_admin, _registry)
+    public {
         seller_hash = _seller_hash;
         customer_hash = _customer_hash;
         delivery_time = _delivery_time;
-        registry = _registry;
-        admin = _admin;
-
-        emit Costructor(registry, admin);
     }
 
     function setDoc_hash(bytes32 _doc_hash) public onlyAdmin {
@@ -53,10 +46,5 @@ contract Invoice is Admin {
         realDelivery_time = _time;
         emit SetRealDelivery_time(_time);
         setDeliveryStatus(true);
-    }
-
-    function changeRegistry(address _newregistry) public onlyAdmin {
-        registry = _newregistry;
-        emit ChangeRegistry(registry);
     }
 }

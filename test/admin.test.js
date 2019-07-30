@@ -127,6 +127,5 @@ contract('Admin', function (accounts) {
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], true);
         });
-
     });
 });
