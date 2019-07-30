@@ -2,8 +2,11 @@ pragma solidity ^0.5.10;
 
 import "./RegistryAdmin.sol";
 import "./IAR.sol";
+import "./StringUtils.sol";
 
 contract Registry is RegistryAdmin {
+
+    using StringUtils for string;
 
     struct info {
         string type_;
@@ -19,6 +22,32 @@ contract Registry is RegistryAdmin {
     constructor(address _admin) RegistryAdmin(_admin) public {}
 
     function addContractToRegistry(address _contract, uint _type, address _admin) public onlyAdmin {
+        _addContractToRegistry(_contract, _type, _admin);
+    }
+
+    function addContractToRegistry(address _contract, uint _type) public onlyAdmin {
+        _addContractToRegistry(_contract, _type, IAR(_contract).admin());
+    }
+
+    function addContractToRegistry(address _contract) public {
+        IAR prevRegistry = IAR(IAR(_contract).registry());
+        require(msg.sender == address(prevRegistry));
+
+        (string memory _type, bool _active, address _admin) = prevRegistry.getContractInfo(_contract);
+        require(_active);
+
+        _addContractToRegistry(_contract, getContractType(_type), _admin);
+    }
+
+    function changeRegistry(address _newRegistry) public {
+        require(registry[msg.sender].active);
+
+        IAR(_newRegistry).addContractToRegistry(msg.sender);
+
+        registry[msg.sender].active = false;
+    }
+
+    function _addContractToRegistry(address _contract, uint _type, address _admin) internal {
         require(!registry[_contract].active);
         require(_type < types.length);
         registry[_contract].type_ = types[_type];
@@ -30,6 +59,13 @@ contract Registry is RegistryAdmin {
 
     function getContractInfo(address _contract) public view returns(string memory, bool, address) {
         return(registry[_contract].type_, registry[_contract].active, registry[_contract].admin);
+    }
+
+    function getContractType(string memory _type) public view returns(uint) {
+        for (uint i = 0; i < types.length; i++)
+            if (types[i].hashCompareWithLengthCheck(_type))
+                return i;
+        revert();
     }
 
     function addType(string memory _newType) public onlyAdmin {
@@ -49,6 +85,12 @@ contract Registry is RegistryAdmin {
         require(msg.sender == registry[_contract].admin);
 
         registry[_contract].active = false;
+    }
+
+    function deactivateContract() public {
+        require(registry[msg.sender].active);
+
+        registry[msg.sender].active = false;
     }
 
     function changeAdmin(address _contract, address _newAdmin) public {

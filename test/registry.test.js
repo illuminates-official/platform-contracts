@@ -40,7 +40,19 @@ contract('Registry', function (accounts) {
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], false);
 
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
+
+            info = await registry.getContractInfo.call(article.address);
+            assert.equal(info[0], "Article");
+            assert.equal(info[1], true);
+            assert.equal(info[2], nextAdmin);
+        });
+
+        it('adding contract to registry (without explicit address of an andmin)', async () => {
+            info = await registry.getContractInfo.call(article.address);
+            assert.equal(info[1], false);
+
+            await registry.methods["addContractToRegistry(address,uint256)"](article.address, 1, {from: admin});
 
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
@@ -49,8 +61,8 @@ contract('Registry', function (accounts) {
         });
 
         it('getting information', async () => {
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
-            await registry.addContractToRegistry(invoice, 4, deployer, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](invoice, 4, deployer, {from: admin});
 
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
@@ -67,20 +79,20 @@ contract('Registry', function (accounts) {
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], false);
 
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
 
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
             assert.equal(info[1], true);
             assert.equal(info[2], nextAdmin);
 
-            await registry.deactivateContract(article.address, {from: nextAdmin});
+            await registry.methods["deactivateContract(address)"](article.address, {from: nextAdmin});
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], false);
         });
 
         it('admin changing (from registry contract)', async () => {
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
             assert.equal(info[1], true);
@@ -95,7 +107,7 @@ contract('Registry', function (accounts) {
         });
 
         it('admin changing (from platform contract)', async () => {
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
             assert.equal(info[1], true);
@@ -147,7 +159,7 @@ contract('Registry', function (accounts) {
             assert.equal(info[1], false);
 
             try {
-                await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: nextAdmin});
+                await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: nextAdmin});
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
@@ -160,7 +172,7 @@ contract('Registry', function (accounts) {
             assert.equal(info[1], false);
 
             try {
-                await registry.addContractToRegistry(article.address, 8, nextAdmin, {from: admin});
+                await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 8, nextAdmin, {from: admin});
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
@@ -172,7 +184,7 @@ contract('Registry', function (accounts) {
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], false);
 
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
 
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
@@ -180,7 +192,7 @@ contract('Registry', function (accounts) {
             assert.equal(info[2], nextAdmin);
 
             try {
-                await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+                await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
@@ -190,7 +202,7 @@ contract('Registry', function (accounts) {
             assert.equal(info[2], nextAdmin);
 
             try {
-                await registry.addContractToRegistry(article.address, 1, deployer, {from: admin});
+                await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, deployer, {from: admin});
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
@@ -200,7 +212,7 @@ contract('Registry', function (accounts) {
             assert.equal(info[2], nextAdmin);
 
             try {
-                await registry.addContractToRegistry(article.address, 3, nextAdmin, {from: admin});
+                await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 3, nextAdmin, {from: admin});
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
@@ -214,7 +226,7 @@ contract('Registry', function (accounts) {
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], false);
 
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
 
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
@@ -222,7 +234,7 @@ contract('Registry', function (accounts) {
             assert.equal(info[2], nextAdmin);
 
             try {
-                await registry.deactivateContract(article.address, {from: deployer});
+                await registry.methods["deactivateContract(address)"](article.address, {from: deployer});
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
@@ -231,7 +243,7 @@ contract('Registry', function (accounts) {
         });
 
         it('admin changing (from registry contract) (not by owner)', async () => {
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
             assert.equal(info[1], true);
@@ -249,7 +261,7 @@ contract('Registry', function (accounts) {
         });
 
         it('admin changing (from platform contract)(not by owner)', async () => {
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");
             assert.equal(info[1], true);
@@ -267,8 +279,8 @@ contract('Registry', function (accounts) {
         });
 
         it('admin changing (from platform contract)(from deactivated contract)', async () => {
-            await registry.addContractToRegistry(article.address, 1, nextAdmin, {from: admin});
-            await registry.deactivateContract(article.address, {from: nextAdmin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
+            await registry.methods["deactivateContract(address)"](article.address, {from: nextAdmin});
 
             try {
                 await article.methods["changeAdmin(address)"](deployer, {from: nextAdmin});
