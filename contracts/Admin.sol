@@ -18,6 +18,7 @@ contract Admin {
         admin = _admin;
         registry = _registry;
         emit AdminChanging(address(0), admin);
+        emit RegistryChanging(address(0), registry);
     }
 
     function changeAdmin(address _newAdmin) public {
@@ -25,16 +26,19 @@ contract Admin {
         require(_newAdmin != address(0));
 
         emit AdminChanging(admin, _newAdmin);
-        admin = _newAdmin;
 
+        admin = _newAdmin;
         IAR(registry).changeAdmin(_newAdmin);
     }
 
-    function changeRegistry(address _newRegistry) public {
-        require(msg.sender == admin || msg.sender == registry);
+    function changeRegistry(address _newRegistry) public onlyAdmin {
         require(_newRegistry != address(0));
 
         emit RegistryChanging(registry, _newRegistry);
+
+        IAR(registry).changeRegistry(_newRegistry);
+
         registry = _newRegistry;
+
     }
 }
