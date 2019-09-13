@@ -1,4 +1,4 @@
-pragma solidity ^0.5.10;
+pragma solidity ^0.5.11;
 
 import "./RegistryAdmin.sol";
 import "./IAR.sol";
@@ -31,16 +31,16 @@ contract Registry is RegistryAdmin {
 
     function addContractToRegistry(address _contract) public {
         IAR prevRegistry = IAR(IAR(_contract).registry());
-        require(msg.sender == address(prevRegistry));
+        require(msg.sender == address(prevRegistry), "Request not from current registry");
 
         (string memory _type, bool _active, address _admin) = prevRegistry.getContractInfo(_contract);
-        require(_active);
+        require(_active, "Contract inactive");
 
         _addContractToRegistry(_contract, getContractType(_type), _admin);
     }
 
     function changeRegistry(address _newRegistry) public {
-        require(registry[msg.sender].active);
+        require(registry[msg.sender].active, "Sender inactive");
 
         IAR(_newRegistry).addContractToRegistry(msg.sender);
 
@@ -65,7 +65,7 @@ contract Registry is RegistryAdmin {
         for (uint i = 0; i < types.length; i++)
             if (types[i].hashCompareWithLengthCheck(_type))
                 return i;
-        revert();
+        revert("Type not found");
     }
 
     function addType(string memory _newType) public onlyAdmin {
@@ -73,7 +73,7 @@ contract Registry is RegistryAdmin {
     }
 
     function removeType(uint index) public onlyAdmin {
-        require(index < types.length);
+        require(index < types.length, "Index out of range");
         for (uint i = index; i < types.length - 1; i++)
             types[i] = types[i + 1];
         // types[index] = types[types.length - 1];
