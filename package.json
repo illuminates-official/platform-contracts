@@ -1,0 +1,27 @@
+{
+  "name": "platform-contracts",
+  "version": "1.0.0",
+  "description": "*Ecosystem contracts*",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illuminates-official/platform-contracts.git"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/illuminates-official/platform-contracts/issues"
+  },
+  "homepage": "https://github.com/illuminates-official/platform-contracts#readme",
+  "dependencies": {
+    "eth-gas-reporter": "^0.2.11",
+    "jshint": "^2.10.2",
+    "truffle": "^5.0.36"
+  }
+}
