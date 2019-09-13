@@ -1,6 +1,8 @@
+const CONTRACTS_DIR = "./contracts/completed";
+
 module.exports = {
 
-  contracts_directory: "./contracts/completed",
+  contracts_directory: CONTRACTS_DIR,
 
   networks: {
  
@@ -17,21 +19,21 @@ module.exports = {
       currency: 'USD',
       showTimeSpent: true,
       excludeContracts: ['Migrations'],
-      src: "./contracts/completed",
+      src: CONTRACTS_DIR,
       onlyCalledMethods: true
      }
   },
 
   compilers: {
     solc: {
-      version: "0.5.10",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.5.11",    // Fetch exact version from solc-bin (default: truffle's version)
       docker: false,       // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {         // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
-         enabled: false,
+         enabled: true,
          runs: 200
        },
-       evmVersion: "byzantium"
+       evmVersion: "petersburg"
       }
     }
   }

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.10;
+pragma solidity ^0.5.11;
 
 import "./IAR.sol";
 
@@ -10,7 +10,7 @@ contract Admin {
     event RegistryChanging(address indexed previousRegistry, address indexed nextRegistry);
 
     modifier onlyAdmin() {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "Sender is not an admin");
         _;
     }
 
@@ -22,8 +22,8 @@ contract Admin {
     }
 
     function changeAdmin(address _newAdmin) public {
-        require(msg.sender == admin || msg.sender == registry);
-        require(_newAdmin != address(0));
+        require(msg.sender == admin || msg.sender == registry, "Sender no an admin or register");
+        require(_newAdmin != address(0), "New admin is the zero address");
 
         emit AdminChanging(admin, _newAdmin);
 
@@ -32,13 +32,11 @@ contract Admin {
     }
 
     function changeRegistry(address _newRegistry) public onlyAdmin {
-        require(_newRegistry != address(0));
+        require(_newRegistry != address(0), "New registry is the zero address");
 
         emit RegistryChanging(registry, _newRegistry);
 
         IAR(registry).changeRegistry(_newRegistry);
-
         registry = _newRegistry;
-
     }
 }

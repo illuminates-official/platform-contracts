@@ -1,4 +1,4 @@
-pragma solidity ^0.5.10;
+pragma solidity ^0.5.11;
 
 
 contract RegistryAdmin {
@@ -7,7 +7,7 @@ contract RegistryAdmin {
     event AdminChanging(address indexed previousAdmin, address indexed nextAdmin);
 
     modifier onlyAdmin() {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "Sender is not an admin");
         _;
     }
 
@@ -17,7 +17,7 @@ contract RegistryAdmin {
     }
 
     function changeRegistryAdmin(address _newAdmin) public onlyAdmin {
-        require(_newAdmin != address(0));
+        require(_newAdmin != address(0), "New admin is the zero address");
 
         emit AdminChanging(admin, _newAdmin);
         admin = _newAdmin;
