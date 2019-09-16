@@ -95,7 +95,7 @@ contract Registry is RegistryAdmin {
     }
 
     function changeAdmin(address _contract, address _newAdmin) public onlyContractAdmin(_contract) {
-        IRegistry(_contract).changeAdmin(_newAdmin);
+        _changeContractAdmin(_contract, _newAdmin);
     }
 
     function changeAdmin(address _newAdmin) public onlyActiveContract {

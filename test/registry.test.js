@@ -52,7 +52,7 @@ contract('Registry', function (accounts) {
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[1], false);
 
-            await registry.methods["addContractToRegistry(address,uint256)"](article.address, 1, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, nextAdmin, {from: admin});
 
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[0], "Article");

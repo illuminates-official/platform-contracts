@@ -27,7 +27,6 @@ contract('Admin', function (accounts) {
         });
 
         it('check admin and registry addresses', async () => {
-            assert.equal(await article.admin(), articleAdmin);
             assert.equal(await article.registry(), registry.address);
         });
 
@@ -37,24 +36,8 @@ contract('Admin', function (accounts) {
 
             await article.changeAdmin(nextAdmin, {from: articleAdmin});
 
-            assert.equal(await article.admin(), nextAdmin);
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[2], nextAdmin);
-        });
-
-        it('changing registry', async () => {
-            registry2 = await RegistryContract.new(nextAdmin, {from: deployer});
-
-            info = await registry.getContractInfo.call(article.address);
-            assert.equal(info[2], articleAdmin);
-
-            await article.changeRegistry(registry2.address, {from: articleAdmin});
-
-            // assert.equal(await article.registry(), registry2.address);
-            // info = await registry2.getContractInfo.call(article.address);
-            // assert.equal(info[1], true);
-            // info = await registry.getContractInfo.call(article.address);
-            // assert.equal(info[1], false);
         });
     });
 
@@ -75,25 +58,8 @@ contract('Admin', function (accounts) {
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
-            assert.equal(await article.admin(), articleAdmin);
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[2], articleAdmin);
-        });
-
-        it('changing registry (zero address)', async () => {
-            registry2 = await RegistryContract.new(nextAdmin, {from: deployer});
-
-            info = await registry.getContractInfo.call(article.address);
-            assert.equal(info[2], articleAdmin);
-
-            try {
-                await article.changeRegistry(zeroAddress, {from: articleAdmin});
-                console.log("fail.\n Exception must be thrown before");
-            } catch (error) {assert(error.message.includes("revert"));}
-
-            assert.equal(await article.registry(), registry.address);
-            info = await registry.getContractInfo.call(article.address);
-            assert.equal(info[1], true);
         });
 
         it('changing admin (not by admin)', async () => {
@@ -105,27 +71,8 @@ contract('Admin', function (accounts) {
                 console.log("fail.\n Exception must be thrown before");
             } catch (error) {assert(error.message.includes("revert"));}
 
-            assert.equal(await article.admin(), articleAdmin);
             info = await registry.getContractInfo.call(article.address);
             assert.equal(info[2], articleAdmin);
-        });
-
-        it('changing registry (not by admin)', async () => {
-            registry2 = await RegistryContract.new(nextAdmin, {from: deployer});
-
-            info = await registry.getContractInfo.call(article.address);
-            assert.equal(info[2], articleAdmin);
-
-            try {
-                await article.changeRegistry(registry2.address, {from: admin});
-                console.log("fail.\n Exception must be thrown before");
-            } catch (error) {assert(error.message.includes("revert"));}
-
-            assert.equal(await article.registry(), registry.address);
-            info = await registry2.getContractInfo.call(article.address);
-            assert.equal(info[1], false);
-            info = await registry.getContractInfo.call(article.address);
-            assert.equal(info[1], true);
         });
     });
 });

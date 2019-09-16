@@ -14,7 +14,7 @@ contract Admin {
         registry = IRegistry(_registry);
     }
 
-    function changeAdmin(address _newAdmin) public {
+    function changeAdmin(address _newAdmin) public onlyAdmin {
         registry.changeAdmin(_newAdmin);
     }
 }

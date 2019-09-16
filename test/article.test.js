@@ -26,7 +26,7 @@ contract('Article', function (accounts) {
         beforeEach('init', async () => {
             registry = await RegistryContract.new(admin, {from: deployer});
             article = await ArticleContract.new(b32(articleAdmin), text, registry.address, {from: deployer});
-            await registry.methods["addContractToRegistry(address,uint256)"](article.address, 1, {from: admin});
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, articleAdmin, {from: admin});
         });
 
         it('check information', async () => {
