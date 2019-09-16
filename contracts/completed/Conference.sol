@@ -13,9 +13,16 @@ contract Conference is Admin {
     mapping(address => bool) public tickets;
     mapping(bytes32 => bool) public ftickets;
 
-    constructor(address payable eth, bytes32 fiat, uint _cost, uint _fcost,
-        address _admin, address _reg) Admin(_admin, _reg)
-    public {
+    constructor(
+        address payable eth,
+        bytes32 fiat,
+        uint _cost,
+        uint _fcost,
+        address _reg
+    )
+        Admin(_reg)
+        public
+    {
         ethRecipient = eth;
         fiatRecipient = fiat;
         cost = _cost;

@@ -14,14 +14,14 @@ module.exports = {
   },
 
   mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions : {
-      currency: 'USD',
-      showTimeSpent: true,
-      excludeContracts: ['Migrations'],
-      src: CONTRACTS_DIR,
-      onlyCalledMethods: true
-     }
+    // reporter: 'eth-gas-reporter',
+    // reporterOptions : {
+    //   currency: 'USD',
+    //   showTimeSpent: true,
+    //   excludeContracts: ['Migrations'],
+    //   src: CONTRACTS_DIR,
+    //   onlyCalledMethods: true
+    //  }
   },
 
   compilers: {

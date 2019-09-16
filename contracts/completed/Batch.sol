@@ -1,4 +1,4 @@
-pragma solidity ^0.5.10;
+pragma solidity ^0.5.11;
 
 import "./SafeMath.sol";
 import "./Admin.sol";
@@ -20,10 +20,17 @@ contract Batch is Admin {
     event Assigment(bytes32 indexed distributor, uint indexed products, uint indexed time);
     event Selling(bytes32 indexed distributor, uint indexed products, uint indexed time);
 
-    constructor(bytes32 _manufacturer, bytes32 _batch, string memory _batchInformation,
-        bytes32[] memory _distributors, uint[] memory _productAmount,
-        address _admin, address _registry) Admin(_admin, _registry)
-    public {
+    constructor(
+        bytes32 _manufacturer,
+        bytes32 _batch,
+        string memory _batchInformation,
+        bytes32[] memory _distributors,
+        uint[] memory _productAmount,
+        address _registry
+    )
+        Admin(_registry)
+        public
+    {
         manufacturer = _manufacturer;
         batch = _batch;
         batchInformation = _batchInformation;

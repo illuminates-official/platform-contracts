@@ -19,9 +19,15 @@ contract Invoice is Admin {
     event SetPayment_status(bool);
     event SetRealDelivery_time(uint);
 
-    constructor(bytes32 _seller_hash, bytes32 _customer_hash,
-                uint _delivery_time, address _admin, address _registry) Admin(_admin, _registry)
-    public {
+    constructor(
+        bytes32 _seller_hash,
+        bytes32 _customer_hash,
+        uint _delivery_time,
+        address _registry
+    )
+        Admin(_registry)
+        public
+    {
         seller_hash = _seller_hash;
         customer_hash = _customer_hash;
         delivery_time = _delivery_time;
