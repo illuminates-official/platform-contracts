@@ -11,8 +11,7 @@ contract PrivateProperty is Admin {
     event New_Dochash(bytes32);
     event New_Doc(string);
 
-    constructor(bytes32 _owner_hash, address _admin, address _registry) Admin(_admin, _registry)
-    public {
+    constructor(bytes32 _owner_hash, address _registry) Admin(_registry) public {
         owner_hash = _owner_hash;
     }
 

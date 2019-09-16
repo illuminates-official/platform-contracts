@@ -22,8 +22,8 @@ contract('Admin', function (accounts) {
     describe('admin functions', async () => {
         beforeEach('init', async () => {
             registry = await RegistryContract.new(admin, {from: deployer});
-            article = await ArticleContract.new(bytes32, text, articleAdmin, registry.address);
-            await registry.methods["addContractToRegistry(address,uint256)"](article.address, 1, {from: admin});
+            article = await ArticleContract.new(bytes32, text, registry.address);
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, articleAdmin, {from: admin});
         });
 
         it('check admin and registry addresses', async () => {
@@ -62,8 +62,8 @@ contract('Admin', function (accounts) {
     describe('Requirements and restrictions', async () => {
         beforeEach('init', async () => {
             registry = await RegistryContract.new(admin, {from: deployer});
-            article = await ArticleContract.new(bytes32, text, articleAdmin, registry.address);
-            await registry.methods["addContractToRegistry(address,uint256)"](article.address, 1, {from: admin});
+            article = await ArticleContract.new(bytes32, text, registry.address);
+            await registry.methods["addContractToRegistry(address,uint256,address)"](article.address, 1, articleAdmin, {from: admin});
         });
 
         it('changing admin (zero address)', async () => {

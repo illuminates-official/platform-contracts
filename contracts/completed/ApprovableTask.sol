@@ -1,4 +1,4 @@
-pragma solidity ^0.5.10;
+pragma solidity ^0.5.11;
 
 import "./Admin.sol";
 import "./IERC20.sol";
@@ -13,12 +13,10 @@ contract ApprovableTask is Admin {
     uint public pay;
     address public customerAddr;
 
-    event ExecutorChanging(bytes32 newExecutor, address admin, uint time);
+    event ExecutorChanging(bytes32 newExecutor, uint time);
     event Approvement(address approve, uint time);
 
-    constructor(bytes32 exec, bytes32 cust, uint _pay,
-        address _admin, address _reg) Admin(_admin, _reg)
-    public {
+    constructor(bytes32 exec, bytes32 cust, uint _pay, address _reg) Admin(_reg) public {
         executor = exec;
         customer = cust;
         pay = _pay;
@@ -31,7 +29,7 @@ contract ApprovableTask is Admin {
 
     function changeExecutor(bytes32 newExecutor) public onlyAdmin {
         executor = newExecutor;
-        emit ExecutorChanging(executor, admin, now);
+        emit ExecutorChanging(executor, now);
     }
 
     function approve(address _approvement) public onlyAdmin {

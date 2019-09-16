@@ -22,7 +22,7 @@ contract('Registry', function (accounts) {
     describe('registry functionality', async () => {
         beforeEach('init', async () => {
             registry = await RegistryContract.new(admin, {from: deployer});
-            article = await ArticleContract.new(bytes32, text, nextAdmin, registry.address);
+            article = await ArticleContract.new(bytes32, text, registry.address);
         });
 
         it('adding type', async () => {
@@ -33,7 +33,7 @@ contract('Registry', function (accounts) {
         it('removing type', async () => {
             assert.equal(await registry.types(5), "Patent");
             await registry.removeType(5, {from: admin});
-            assert.equal(await registry.types(5), "PrivateProperty");
+            assert.equal(await registry.types(5), "Task");
         });
 
         it('adding contract to registry', async () => {
@@ -126,7 +126,7 @@ contract('Registry', function (accounts) {
     describe('Requirements and restrictions', async () => {
         beforeEach('init', async () => {
             registry = await RegistryContract.new(admin, {from: deployer});
-            article = await ArticleContract.new(bytes32, text, nextAdmin, registry.address);
+            article = await ArticleContract.new(bytes32, text, registry.address);
         });
 
         it('adding type (not by owner)', async () => {
