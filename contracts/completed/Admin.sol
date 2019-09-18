@@ -1,42 +1,20 @@
 pragma solidity ^0.5.11;
 
-import "./IAR.sol";
+import "./IRegistry.sol";
 
 contract Admin {
-    address public admin;
-    address public registry;
-
-    event AdminChanging(address indexed previousAdmin, address indexed nextAdmin);
-    event RegistryChanging(address indexed previousRegistry, address indexed nextRegistry);
+    IRegistry public registry;
 
     modifier onlyAdmin() {
-        require(msg.sender == admin, "Sender is not an admin");
+        require(registry.isAdmin(msg.sender), "Sender is not an admin");
         _;
     }
 
-    constructor(address _admin, address _registry) internal {
-        admin = _admin;
-        registry = _registry;
-        emit AdminChanging(address(0), admin);
-        emit RegistryChanging(address(0), registry);
+    constructor(address _registry) internal {
+        registry = IRegistry(_registry);
     }
 
-    function changeAdmin(address _newAdmin) public {
-        require(msg.sender == admin || msg.sender == registry, "Sender no an admin or register");
-        require(_newAdmin != address(0), "New admin is the zero address");
-
-        emit AdminChanging(admin, _newAdmin);
-
-        admin = _newAdmin;
-        IAR(registry).changeAdmin(_newAdmin);
-    }
-
-    function changeRegistry(address _newRegistry) public onlyAdmin {
-        require(_newRegistry != address(0), "New registry is the zero address");
-
-        emit RegistryChanging(registry, _newRegistry);
-
-        IAR(registry).changeRegistry(_newRegistry);
-        registry = _newRegistry;
+    function changeAdmin(address _newAdmin) public onlyAdmin {
+        registry.changeAdmin(_newAdmin);
     }
 }

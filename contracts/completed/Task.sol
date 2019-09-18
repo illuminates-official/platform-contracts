@@ -9,13 +9,20 @@ contract Task is Admin {
     bytes32 public tor;
     bytes32 public correspondenceStatus;
 
-    event ExecutorChanging(bytes32 newExecutor, address admin, uint time);
-    event TorChanging(bytes32 newTorm, address admin, uint time);
-    event cStatusChanging(bytes32 newStatus, address admin, uint time);
+    event ExecutorChanging(bytes32 newExecutor, uint time);
+    event TorChanging(bytes32 newTorm, uint time);
+    event cStatusChanging(bytes32 newStatus, uint time);
 
-    constructor(bytes32 exec, bytes32 cust, bytes32 _tor, bytes32 cStat,
-        address _admin, address _reg) Admin(_admin, _reg)
-    public {
+    constructor(
+        bytes32 exec,
+        bytes32 cust,
+        bytes32 _tor,
+        bytes32 cStat,
+        address _reg
+    )
+        Admin(_reg)
+        public
+    {
         executor = exec;
         customer = cust;
         tor = _tor;
@@ -29,16 +36,16 @@ contract Task is Admin {
 
     function changeExecutor(bytes32 newExecutor) public onlyAdmin {
         executor = newExecutor;
-        emit ExecutorChanging(executor, admin, now);
+        emit ExecutorChanging(executor, now);
     }
 
     function changeTor(bytes32 newTor) public onlyAdmin {
         tor = newTor;
-        emit TorChanging(tor, admin, now);
+        emit TorChanging(tor, now);
     }
 
     function changeCStatus(bytes32 newCStatus) public onlyAdmin {
         correspondenceStatus = newCStatus;
-        emit cStatusChanging(correspondenceStatus, admin, now);
+        emit cStatusChanging(correspondenceStatus, now);
     }
 }
